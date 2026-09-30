@@ -38,16 +38,6 @@ class MainActivity : AppCompatActivity() {
         val checkBoxAntorcha = findViewById<CheckBox>(R.id.checkBox)
         val boton = findViewById<ImageButton>(R.id.imageButton)
 
-        editText.requestFocus()
-
-        editText.setOnFocusChangeListener { _, tieneFoco ->
-            if (!tieneFoco) {
-                if (editText.text.toString().isEmpty()) {
-                    editText.error = "Error: El ejército no acepta soldados anónimos"
-                }
-            }
-        }
-
         val unidad = resources.getStringArray(R.array.unidad)
 
         val adaptador = ArrayAdapter(
@@ -61,6 +51,16 @@ class MainActivity : AppCompatActivity() {
         )
 
         spinner.adapter = adaptador
+
+        editText.requestFocus()
+
+        editText.setOnFocusChangeListener { _, tieneFoco ->
+            if (!tieneFoco) {
+                if (editText.text.toString().isEmpty()) {
+                    editText.error = "Error: El ejército no acepta soldados anónimos"
+                }
+            }
+        }
 
         boton.setOnClickListener {
             if (editText.text.toString().isEmpty()) {
@@ -87,6 +87,64 @@ class MainActivity : AppCompatActivity() {
                 ).show()
             }
         }
+
+        if (savedInstanceState != null) {
+
+            editText.setText(
+                savedInstanceState.getString("idTropa")
+            )
+
+            spinner.setSelection(
+                savedInstanceState.getInt("unidad")
+            )
+
+            radioGroup.check(
+                savedInstanceState.getInt("equipamiento")
+            )
+
+            checkBoxAntorcha.isChecked =
+                savedInstanceState.getBoolean("antorcha")
+
+            val error = savedInstanceState.getString("error")
+
+            if (error != null) {
+                editText.error = error
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        val editText = findViewById<EditText>(R.id.editTextText)
+        val spinner = findViewById<Spinner>(R.id.spinner)
+        val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
+        val checkBoxAntorcha = findViewById<CheckBox>(R.id.checkBox)
+
+        outState.putString(
+            "idTropa",
+            editText.text.toString()
+        )
+
+        outState.putInt(
+            "unidad",
+            spinner.selectedItemPosition
+        )
+
+        outState.putInt(
+            "equipamiento",
+            radioGroup.checkedRadioButtonId
+        )
+
+        outState.putBoolean(
+            "antorcha",
+            checkBoxAntorcha.isChecked
+        )
+
+        outState.putString(
+            "error",
+            editText.error?.toString()
+        )
     }
 
     override fun onStart() {
