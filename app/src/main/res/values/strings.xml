@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">TorredeOrthanc</string>
+
+    <string-array name="unidad">
+        <item>Guerrero</item>
+        <item>Arquero</item>
+        <item>Explorador</item>
+        <item>Berserker</item>
+    </string-array>
 </resources>
