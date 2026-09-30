@@ -1,6 +1,7 @@
 package com.isengard.fruegas
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.EditText
@@ -22,7 +23,12 @@ class MainActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                systemBars.bottom
+            )
             insets
         }
 
@@ -37,24 +43,8 @@ class MainActivity : AppCompatActivity() {
         editText.setOnFocusChangeListener { _, tieneFoco ->
             if (!tieneFoco) {
                 if (editText.text.toString().isEmpty()) {
-                    editText.error = "Error: El soldado no puede ser anónimo"
+                    editText.error = "Error: El ejército no acepta soldados anónimos"
                 }
-            }
-        }
-
-        boton.setOnClickListener {
-            if (editText.text.toString().isEmpty()) {
-                editText.error = "Error: El soldado no puede ser anónimo"
-            } else {
-                val unidadSeleccionada = spinner.selectedItem.toString()
-                val equipamientoSeleccionado = radioGroup.checkedRadioButtonId
-                val antorchaSeleccionada = checkBoxAntorcha.isChecked
-
-                Toast.makeText(
-                    this,
-                    "¡Unidad ${editText.text} enviada al Abismo de Helm!",
-                    Toast.LENGTH_LONG
-                ).show()
             }
         }
 
@@ -72,6 +62,70 @@ class MainActivity : AppCompatActivity() {
 
         spinner.adapter = adaptador
 
+        boton.setOnClickListener {
+            if (editText.text.toString().isEmpty()) {
 
+                editText.error = "Error: El ejército no acepta soldados anónimos"
+
+            } else {
+
+                val unidadSeleccionada = spinner.selectedItem.toString()
+                val equipamientoSeleccionado = radioGroup.checkedRadioButtonId
+                val antorchaSeleccionada = checkBoxAntorcha.isChecked
+
+                if (!antorchaSeleccionada) {
+                    Log.e(
+                        "FraguasIsengard",
+                        "¡Peligro! Unidad enviada sin fuego"
+                    )
+                }
+
+                Toast.makeText(
+                    this,
+                    "¡Unidad ${editText.text} enviada al Abismo de Helm!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(
+            "FraguasIsengard",
+            "onStart: Las fraguas se encienden"
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(
+            "FraguasIsengard",
+            "onResume: Saruman continúa la producción"
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(
+            "FraguasIsengard",
+            "onPause: Saruman detiene la producción temporalmente"
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(
+            "FraguasIsengard",
+            "onStop: Las fraguas quedan en silencio"
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(
+            "FraguasIsengard",
+            "onDestroy: La producción de Isengard termina"
+        )
     }
 }
